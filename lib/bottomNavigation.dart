@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wecookmobile/home.dart';
 import 'package:wecookmobile/login.dart';
+import 'package:wecookmobile/create_recipe.dart';
 
 class bottomNavigation extends StatefulWidget {
   const bottomNavigation({Key? key}) : super(key: key);
@@ -14,6 +15,8 @@ class _bottomNavigationState extends State<bottomNavigation> {
   int _paginaActual=0;
   List<Widget> _paginas =[
     home(),
+    CreateRecipeScreen(),
+    CreateRecipeScreen(),
     login(),
   ];
 

@@ -374,9 +374,9 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
 
-      appBar: AppBar(
-        backgroundColor: Colors.purple,
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      // ),
 
       body: Container(
         child: Column(

@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         // textTheme: GoogleFonts.montserratTextTheme(
         //   Theme.of(context).textTheme,
         // ),
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.brown,
       ),
       home: bottomNavigation(),
     );
