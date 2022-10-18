@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:wecookmobile/bottomNavigation.dart';
-//import 'package:google_fonts/google_fonts.dart';
 import 'login.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -25,3 +26,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
