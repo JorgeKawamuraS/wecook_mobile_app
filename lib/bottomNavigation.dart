@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:wecookmobile/home.dart';
 import 'package:wecookmobile/login.dart';
-import 'package:wecookmobile/register.dart';
-import 'package:wecookmobile/create_recipe.dart';
 import 'package:wecookmobile/search_recipe.dart';
+import 'package:wecookmobile/create_recipe.dart';
+import 'package:wecookmobile/profile.dart';
 
 class bottomNavigation extends StatefulWidget {
   const bottomNavigation({Key? key}) : super(key: key);
