@@ -9,7 +9,7 @@ class listProfile{
     //log('listadoRecipepre: $listaJson');
     if(listaJson!=null){
       for(var c in listaJson){
-        log('c: $c');
+        //log('c: $c');
         final ca=Profile.objJson(c);
         //inspect(listaJson);
         //log('pepew: $ca');

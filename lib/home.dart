@@ -3,12 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:scaled_list/scaled_list.dart';
 import 'package:wecookmobile/api/service.dart';
 import 'recipe_detail.dart';
+import 'globals.dart' as globals;
 
 class home extends StatelessWidget {
   const home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+    print("pepe");
+
+    print(globals.isLoggedIn);
+
+    globals.isLoggedIn? print("pepe1"): print("pepes");
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(

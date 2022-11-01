@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:wecookmobile/bottomNavigation.dart';
 import 'register.dart';
+import 'globals.dart' as globals;
+import 'home.dart';
 
 class login extends StatelessWidget {
   const login({Key? key}) : super(key: key);
@@ -73,7 +76,10 @@ class login extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             primary: Colors.white,
                           ),
-                          onPressed: (){},
+                          onPressed: (){
+                            globals.isLoggedIn = true;
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>bottomNavigation()));
+                          },
                           child: Padding(
                             padding: const EdgeInsets.all(15),
                             child: Text("Ingresar",style:TextStyle(

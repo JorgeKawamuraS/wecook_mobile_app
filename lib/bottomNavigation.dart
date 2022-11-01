@@ -4,6 +4,7 @@ import 'package:wecookmobile/login.dart';
 import 'package:wecookmobile/search_recipe.dart';
 import 'package:wecookmobile/create_recipe.dart';
 import 'package:wecookmobile/profile.dart';
+import 'globals.dart' as globals;
 
 class bottomNavigation extends StatefulWidget {
   const bottomNavigation({Key? key}) : super(key: key);
@@ -18,8 +19,8 @@ class _bottomNavigationState extends State<bottomNavigation> {
   List<Widget> _paginas =[
     home(),
     SearchRecipe(),
-    CreateRecipeScreen(),
-    login(),
+    ProfileScreen(),
+    globals.isLoggedIn ? ProfileScreen() : login(),
   ];
 
   @override
