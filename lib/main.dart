@@ -17,9 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // textTheme: GoogleFonts.montserratTextTheme(
-        //   Theme.of(context).textTheme,
-        // ),
+        fontFamily: 'Montserrat',
         primarySwatch: Colors.brown,
       ),
       home: bottomNavigation(),

@@ -17,6 +17,9 @@ class Recipe{
   final String recommendation;
   final int profileId;
   final int cookbookId;
+  // final List<Multimedia> multimedia;
+  // final List<Tag> tags;
+  // final List<Ingredient> ingredients;
 
   Recipe({
     required this.id,
@@ -26,7 +29,10 @@ class Recipe{
     required this.preparation,
     required this.recommendation,
     required this.profileId,
-    required this.cookbookId
+    required this.cookbookId,
+    // required this.multimedia,
+    // required this.tags,
+    // required this.ingredients
 
   });
 
@@ -39,7 +45,11 @@ class Recipe{
         preparation:json['preparation'] as String,
         recommendation:json['recommendation'] as String,
         profileId: json['profileId'] as int,
-        cookbookId: json['cookbookId'] as int);
+        cookbookId: json['cookbookId'] as int,
+        // multimedia: json['multimedia'] as List<Multimedia>,
+        // tags: json['tags'] as List<Tag>,
+        // ingredients: json['ingredients'] as List<Ingredient>
+    );
   }
 
 }

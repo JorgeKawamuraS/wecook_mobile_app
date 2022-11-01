@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'register.dart';
+import 'login.dart';
 
-class login extends StatelessWidget {
-  const login({Key? key}) : super(key: key);
+class register extends StatelessWidget {
+  const register({Key? key}) : super(key: key);
 
 
   @override
@@ -14,9 +14,9 @@ class login extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-                SizedBox(height: 10,),
+              SizedBox(height: 10,),
 
-                Text('Iniciar Sesión',style: TextStyle(
+              Text('Crea tu cuenta',style: TextStyle(
                 //fontWeight: FontWeight.bold,
                 fontSize: 32, color: Colors.white,
               ),),
@@ -33,7 +33,27 @@ class login extends StatelessWidget {
                     child: TextField(
                       decoration: InputDecoration(
                         border:InputBorder.none,
-                        hintText: 'Usuario',
+                        hintText: 'Nombre',
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    //borderRadius: BorderRadius.circular(15),
+                  ),
+                  child:Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextField(
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        border:InputBorder.none,
+                        hintText: 'Correo',
                       ),
                     ),
                   ),
@@ -76,8 +96,8 @@ class login extends StatelessWidget {
                           onPressed: (){},
                           child: Padding(
                             padding: const EdgeInsets.all(15),
-                            child: Text("Ingresar",style:TextStyle(
-                                //fontWeight: FontWeight.bold,
+                            child: Text("Registrarse",style:TextStyle(
+                              //fontWeight: FontWeight.bold,
                                 fontSize: 18,
                                 color: Colors.black
                             )),
@@ -95,14 +115,14 @@ class login extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("¿No tienes una cuenta? ", style: TextStyle(
+                  Text("¿Ya tienes una cuenta? ", style: TextStyle(
                     color: Colors.white,
                   ),),
                   GestureDetector(
                     onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>register()));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>login()));
                     },
-                    child: Text("Regístrate", style: TextStyle(
+                    child: Text("Inicia Sesión", style: TextStyle(
                       fontWeight: FontWeight.bold,color:Colors.white,
                     ),),
                   )
