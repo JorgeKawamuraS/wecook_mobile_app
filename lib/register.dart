@@ -33,7 +33,7 @@ class _registerState extends State<register> {
 
   registerProfile(int userId, String name, String photo, int dni) async {
     var jsonResponse = null;
-    Uri myUri = Uri.parse("http://ec2-18-207-219-161.compute-1.amazonaws.com:8093/profiles/users/$userId/profiles");
+    Uri myUri = Uri.parse("http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/profiles/users/$userId/profiles");
 
     var response = await http.post(myUri, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -78,7 +78,7 @@ class _registerState extends State<register> {
 
   registerUser(String email, String password, String name, String photo, int dni) async {
     var jsonResponse = null;
-    Uri myUri = Uri.parse("http://ec2-18-207-219-161.compute-1.amazonaws.com:8093/profiles/users/register");
+    Uri myUri = Uri.parse("http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/profiles/users/register");
 
     var response = await http.post(myUri, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -375,7 +375,7 @@ class _registerState extends State<register> {
                             registerUser(emailController.text, passwordController.text, nameController.text, base64string, int.parse(dniController.text));                 
                             globals.isLoggedIn = true;
                             globals.idNavigation = 0;
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const bottomNavigation()));
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>bottomNavigation(r: 0, chips: [],)));
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                               content: Text("Revise los datos ingresados"),

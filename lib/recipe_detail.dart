@@ -1,16 +1,22 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'api/multimedia.dart';
 import 'api/profile.dart';
 import 'api/recipe.dart';
 import 'package:wecookmobile/api/service.dart';
+import 'globals.dart' as globals;
 
 class recipe_detail extends StatefulWidget {
 
+
   Recipe r;
+  Multimedia m;
 
   late String preparation;
   late List <String> _steps;
 
-  recipe_detail({required this.r});
+  recipe_detail({required this.r, required this.m});
 
   @override
   State<recipe_detail> createState() => _recipe_detailState();
@@ -18,6 +24,8 @@ class recipe_detail extends StatefulWidget {
 
 class _recipe_detailState extends State<recipe_detail> {
 
+  final TextEditingController _comment = TextEditingController();
+  late int _status;
 
   @override
   void initState() {
@@ -43,7 +51,7 @@ class _recipe_detailState extends State<recipe_detail> {
       SingleChildScrollView(
         child: Column(
           children: [
-            Image.network('https://food.fnr.sndimg.com/content/dam/images/food/fullset/2013/12/9/0/FNK_Cheesecake_s4x3.jpg.rend.hgtvcom.616.462.suffix/1387411272847.jpeg',width: double.infinity,fit:BoxFit.fitHeight,),
+            Image.network(widget.m.url,width: double.infinity,fit:BoxFit.fitHeight,),
 
             SizedBox(height: 15,),
             Padding(
@@ -59,6 +67,17 @@ class _recipe_detailState extends State<recipe_detail> {
                     alignment: Alignment.centerLeft,
                     child: Text("Ingredientes", style: TextStyle(fontSize: 20,fontWeight:FontWeight.bold )),
                   ),
+                  ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount:widget.r.ingredients.length,
+                      itemBuilder: (context,index){
+                        var ing=widget.r.ingredients[index].name;
+                        return ListTile(
+                          title: Text('\u2022'+' '+ing.toString()),
+                        );
+                      }),
+
                   SizedBox(height: 15,),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -117,20 +136,63 @@ class _recipe_detailState extends State<recipe_detail> {
                   SizedBox(height: 15,),
 
                   TextFormField(
-                    decoration: const InputDecoration(
+                    controller: _comment,
+                    decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Agrega un Comentario',
-                      suffixIcon:Align(
-                        widthFactor: 1.0,
-                        heightFactor: 1.0,
-                        child: Icon(
-                          Icons.send,
-                        ),
-                      ),
+                      suffixIcon:IconButton(
+                          onPressed: () async {
+                            _status= await service.createComment(_comment.text, globals.userId, widget.r.id);
+                            log(_status.toString());
+                            if(_status==201){
+                              log("clear");
+                              _comment.clear();
+                              setState(() {});
+                            }
+
+                          },
+                          icon: Icon(
+                            Icons.send,
+                          ))
+                      // suffixIcon:Align(
+                      //   widthFactor: 1.0,
+                      //   heightFactor: 1.0,
+                      //   child: Icon(
+                      //     Icons.send,
+                      //   ),
+                      // ),
                     ),
                   ),
                   SizedBox(height: 15,),
 
+                  FutureBuilder(
+                    initialData: [],
+                    future:service.getComment(widget.r.id),
+                    builder: (context, AsyncSnapshot<List> snapshot){
+                      return ListView.separated(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount:snapshot.data!.length,
+                          itemBuilder: (context,index){
+                            var comment=snapshot.data![index];
+                            return FutureBuilder<Profile>(
+                              future:service.getProfileById(),
+                              builder: (context, snapshot){
+                                var profile=snapshot.data!;
+                                return ListTile(
+                                  title: Text(profile.name.toString()),
+                                  subtitle: Text(comment.text.toString()),
+                                );
+                              },
+                            );
+
+                          },
+                          separatorBuilder: (context, index) {
+                            return Divider();
+                          },);
+
+                    },
+                  ),
                 ],
               ),
             ),

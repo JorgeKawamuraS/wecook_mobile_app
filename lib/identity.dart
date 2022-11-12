@@ -77,7 +77,7 @@ class _IdentityScreenState extends State<IdentityScreen> {
 
   updateProfile(int profileId, String name, String gender, int dni, String birthdate) async {
     var jsonResponse = null;
-    Uri myUri = Uri.parse("http://ec2-18-207-219-161.compute-1.amazonaws.com:8093/profiles/$profileId");
+    Uri myUri = Uri.parse("http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/profiles/$profileId");
 
     var response = await http.put(myUri, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',

@@ -1,12 +1,26 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:wecookmobile/api/user.dart';
 import 'package:wecookmobile/bottomNavigation.dart';
 import 'register.dart';
 import 'globals.dart' as globals;
 import 'home.dart';
+import 'package:wecookmobile/api/service.dart';
 
-class login extends StatelessWidget {
+class login extends StatefulWidget {
   const login({Key? key}) : super(key: key);
 
+  @override
+  State<login> createState() => _loginState();
+}
+
+class _loginState extends State<login> {
+
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  Future<User>? _futureAlbum;
+  late int _user;
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +31,9 @@ class login extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-                SizedBox(height: 10,),
+              SizedBox(height: 10,),
 
-                Text('Iniciar Sesión',style: TextStyle(
+              Text('Iniciar Sesión',style: TextStyle(
                 //fontWeight: FontWeight.bold,
                 fontSize: 32, color: Colors.white,
               ),),
@@ -34,6 +48,7 @@ class login extends StatelessWidget {
                   child:Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: TextField(
+                      controller: _email,
                       decoration: InputDecoration(
                         border:InputBorder.none,
                         hintText: 'Usuario',
@@ -53,6 +68,7 @@ class login extends StatelessWidget {
                   child:Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: TextField(
+                      controller: _password,
                       obscureText: true,
                       decoration: InputDecoration(
                         border:InputBorder.none,
@@ -76,14 +92,27 @@ class login extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             primary: Colors.white,
                           ),
-                          onPressed: (){
-                            globals.isLoggedIn = true;
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>bottomNavigation()));
+                          onPressed: () async {
+                            _user= await service.login(_email.text,_password.text);
+                            setState(() {
+                              log('result: $_user');
+                            });
+                            if(_user!=0){
+                              globals.userId=_user;
+                              globals.isLoggedIn = true;
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>bottomNavigation(r:0, chips: [],)));
+                            }
+                            else{
+                              log('no login');
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  content: Text("Contraseña incorrecta")));
+                            }
+
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(15),
                             child: Text("Ingresar",style:TextStyle(
-                                //fontWeight: FontWeight.bold,
+                              //fontWeight: FontWeight.bold,
                                 fontSize: 18,
                                 color: Colors.black
                             )),

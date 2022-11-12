@@ -8,6 +8,7 @@ import 'tag.dart';
 import 'ingredient.dart';
 import 'multimedia.dart';
 
+
 class Recipe{
   final int id;
   final String name;
@@ -19,7 +20,7 @@ class Recipe{
   final int cookbookId;
   // final List<Multimedia> multimedia;
   // final List<Tag> tags;
-  // final List<Ingredient> ingredients;
+  final List<Ingredient> ingredients;
 
   Recipe({
     required this.id,
@@ -32,7 +33,7 @@ class Recipe{
     required this.cookbookId,
     // required this.multimedia,
     // required this.tags,
-    // required this.ingredients
+    required this.ingredients
 
   });
 
@@ -48,7 +49,9 @@ class Recipe{
         cookbookId: json['cookbookId'] as int,
         // multimedia: json['multimedia'] as List<Multimedia>,
         // tags: json['tags'] as List<Tag>,
-        // ingredients: json['ingredients'] as List<Ingredient>
+        ingredients: List<Ingredient>.from(json['ingredients'].map((x)=>Ingredient.objJson(x)))
+        // ingredients: json['ingredients'].map((value)=>
+        //     Ingredient.objJson(value)).toList() as List<Ingredient>
     );
   }
 

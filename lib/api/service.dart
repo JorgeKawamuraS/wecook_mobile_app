@@ -2,18 +2,24 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:wecookmobile/api/profile.dart';
+import 'package:wecookmobile/api/multimedia.dart';
 import 'package:wecookmobile/api/recipe.dart';
 import 'ingredient.dart';
 import 'listProfile.dart';
 import 'listRecipe.dart';
 import 'listIngredient.dart';
+import 'package:wecookmobile/api/comment.dart';
+import 'listComment.dart';
+import 'user.dart';
+
 
 
 class service{
 
+
   static Future<List<Ingredient>> getAllIngredients() async{
 
-    final rspta = await http.get(Uri.parse('http://ec2-18-207-219-161.compute-1.amazonaws.com:8093/recipes/ingredients'));
+    final rspta = await http.get(Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/recipes/ingredients'));
 
     if(rspta.statusCode == 200){
       final rsptaJson = json.decode(rspta.body);
@@ -27,28 +33,32 @@ class service{
 
   static Future<List<Recipe>> getRecipe() async{
 
-    final rspta=await http.get(Uri.parse('http://ec2-18-207-219-161.compute-1.amazonaws.com:8093/recipes'));
-
+    final rspta=await http.get(Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/recipes'));
+   //log('data: $rspta');
     if(rspta.statusCode==200){
       final rsptaJson=json.decode(rspta.body);
-      //log('data: $rsptaJson');
+      final rsptacero=rsptaJson[0];
+      //log('rsptaJson: $rsptacero');
       final todosRecipe=listRecipe.listaRecipe(rsptaJson);
      // log('data222: $todosRecipe');
       return todosRecipe;
     }
     return <Recipe>[];
   }
-  
+
+
   static Future<List<Profile>> getProfile() async{
 
-    final rspta=await http.get(Uri.parse('http://ec2-44-202-132-149.compute-1.amazonaws.com:8093/profiles'));
+    //log('getprofile');
+    final rspta=await http.get(Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/profiles'));
+    //log('rptass');
 
 
     if(rspta.statusCode==200){
       final rsptaJson=json.decode(rspta.body);
       //log('data: $rsptaJson');
       final todosProfile=listProfile.listaProfile(rsptaJson);
-      // log('data222: $todosRecipe');
+     // log('data222: $todosProfile');
       return todosProfile;
     }
     return <Profile>[];
@@ -56,7 +66,7 @@ class service{
 
   static Future<Profile> getProfileById() async{
 
-    final rspta=await http.get(Uri.parse('http://ec2-18-207-219-161.compute-1.amazonaws.com:8093/profiles/1'));
+    final rspta=await http.get(Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/profiles/1'));
 
     if(rspta.statusCode==200){
       final rsptaJson=json.decode(rspta.body);
@@ -74,11 +84,12 @@ class service{
 
   static Future<Profile> getObjectProfileById(int id) async{
 
-    final rspta=await http.get(Uri.parse('http://ec2-18-207-219-161.compute-1.amazonaws.com:8093/profiles/$id'));
+    final rspta=await http.get(Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/profiles/$id'));
 
+   // log('rspta');
     if(rspta.statusCode==200){
       final rsptaJson=json.decode(rspta.body);
-      log('data: $rsptaJson');
+     // log('data: $rsptaJson');
       final profile=Profile.objJson(rsptaJson);
       // log('data222: $todosRecipe');
       //return todosProfile;
@@ -90,4 +101,97 @@ class service{
    // return <Profile>[];
   }
 
+  static Future<Multimedia> getMultimediaByRecipeId(recipeId) async{
+
+    // log('profile id');
+
+    final rspta=await http.get(Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/recipes/$recipeId/multimedia'));
+
+    log('rspta');
+    if(rspta.statusCode==200){
+      final rsptaJson=json.decode(rspta.body);
+      log('data: ${rsptaJson[0]}');
+      final multimedia=Multimedia.objJson(rsptaJson[0]);
+      log('data222: $multimedia');
+      //return todosProfile;
+      return multimedia;
+    }
+    else{
+      throw Exception('Failed to load multimedia');
+    }
+    // return <Profile>[];
+  }
+
+  static Future<int> login(String email, String password) async {
+    final response = await http.post(
+      Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/profiles/users/login'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': email,
+        'password':password
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      final data=User.objJson(jsonDecode(response.body));
+
+      final userId= data.id;
+      //log('200: $data');
+      //log('200: $userId');
+      return userId;
+    } else {
+      //log('200 no');
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      return 0;
+    }
+  }
+
+  static Future<List<Comment>> getComment(int recipeId) async{
+
+    final rspta=await http.get(Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/recipes/$recipeId/comments'));
+    //log('data: $rspta');
+    if(rspta.statusCode==200){
+      final rsptaJson=json.decode(rspta.body);
+     // log('data: $rsptaJson');
+      final todosComment=listComment.listaComment(rsptaJson);
+      // log('data222: $todosRecipe');
+      return todosComment;
+    }
+    return <Comment>[];
+  }
+
+  static Future<int> createComment(String text, int profileId,int recipeId) async {
+    final response = await http.post(
+      Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/recipes/$recipeId/comments'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<dynamic, dynamic>{
+        'text': text,
+        'profileId': profileId,
+      }),
+    );
+
+    log((response.statusCode).toString());
+    if (response.statusCode == 201) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+
+      //final data=User.objJson(jsonDecode(response.body));
+      //final userId= data.id;
+      //log('200: $data');
+      //log('200: $userId');
+      return response.statusCode;
+    } else {
+      //log('200 no');
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      return 0;
+    }
+  }
 }

@@ -9,4 +9,12 @@ class Multimedia{
     required this.url,
   });
 
+  static Multimedia objJson(Map<String, dynamic> json){
+    return Multimedia(
+      id: json['id'] as int,
+      url:json['url'] as String,
+
+    );
+  }
+
 }

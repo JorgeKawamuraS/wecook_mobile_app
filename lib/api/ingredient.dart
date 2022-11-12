@@ -20,6 +20,7 @@ class Ingredient{
       name: json['name'] as String,
       calories: json['calories'] as double,
       price: json['price'] as double,
+
     );
   }
 

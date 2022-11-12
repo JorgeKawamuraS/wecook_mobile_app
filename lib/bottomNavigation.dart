@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:wecookmobile/home.dart';
 import 'package:wecookmobile/login.dart';
@@ -5,9 +7,15 @@ import 'package:wecookmobile/search_recipe.dart';
 import 'package:wecookmobile/create_recipe.dart';
 import 'package:wecookmobile/profile.dart';
 import 'globals.dart' as globals;
+import 'package:wecookmobile/helpers/chip_model.dart';
 
 class bottomNavigation extends StatefulWidget {
-  const bottomNavigation({Key? key}) : super(key: key);
+  //const bottomNavigation({Key? key}) : super(key: key);
+
+  int r;
+  List<ChipModel> chips;
+
+  bottomNavigation({required this.r,required this.chips});
 
   @override
   State<bottomNavigation> createState() => _bottomNavigationState();
@@ -18,32 +26,49 @@ class _bottomNavigationState extends State<bottomNavigation> {
   int _paginaActual=0;
   List<Widget> _paginas =[
     home(),
-    SearchRecipe(),
+    SearchRecipe(chips: [],),
     CreateRecipeScreen(),
     globals.isLoggedIn ? ProfileScreen() : login(),
   ];
 
+  late List<ChipModel> ing;
+
+  //late List<Widget> _paginas;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _paginaActual = globals.idNavigation;
+
+    ing = widget.chips;
+
+    log("pepepepe");
+    inspect(ing);
+
+    _paginas =[
+      home(),
+      SearchRecipe(chips: ing),
+      CreateRecipeScreen(),
+      globals.isLoggedIn ? ProfileScreen() : login(),
+    ];
+
   }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _paginas[_paginaActual],
+      body: _paginas[widget.r],
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
         onTap:(index){
           setState(() {
-            _paginaActual=index;
+            widget.r=index;
           });
         },
-        currentIndex: _paginaActual,
+        currentIndex: widget.r,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home),label:"Home"),
           BottomNavigationBarItem(icon: Icon(Icons.search),label:"Buscar"),

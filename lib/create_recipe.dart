@@ -101,7 +101,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
 
   createMultimedia(String photo, int recipeId) async {
     var jsonResponse = null;
-    Uri myUri = Uri.parse("http://ec2-18-207-219-161.compute-1.amazonaws.com:8093/recipes/$recipeId/multimedia");
+    Uri myUri = Uri.parse("http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/recipes/$recipeId/multimedia");
 
     var response = await http.post(myUri, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -130,7 +130,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
 
   assignIngredients(int recipeId, int ingredientId) async {
     var jsonResponse = null;
-    Uri myUri = Uri.parse("http://ec2-18-207-219-161.compute-1.amazonaws.com:8093/recipes/$recipeId/ingredients/$ingredientId");
+    Uri myUri = Uri.parse("http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/recipes/$recipeId/ingredients/$ingredientId");
 
     var response = await http.post(myUri, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -164,7 +164,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
 
   createRecipe(String name, bool exclusive, String preparation, String recommendation) async {
     var jsonResponse = null;
-    Uri myUri = Uri.parse("http://ec2-18-207-219-161.compute-1.amazonaws.com:8093/recipes");
+    Uri myUri = Uri.parse("http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/recipes");
 
     var response = await http.post(myUri, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -373,7 +373,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                                 continued4();
                                 createRecipe(nameController.text, exclusiveness, preparation, recommendationController.text);
                                 globals.idNavigation = 0;
-                                Navigator.push(context, MaterialPageRoute(builder: ((context) => const bottomNavigation())));
+                                Navigator.push(context, MaterialPageRoute(builder: ((context) => bottomNavigation(r: 0, chips: [],))));
                               }
                             },
                             style: ElevatedButton.styleFrom(
@@ -825,7 +825,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                     style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.brown)),
                     onPressed: () {
                       globals.idNavigation = 3;
-                      Navigator.push(context, MaterialPageRoute(builder: ((context) => const bottomNavigation())));
+                      Navigator.push(context, MaterialPageRoute(builder: ((context) => bottomNavigation(r: 3, chips: [],))));
                     },
                   ),
                   const SizedBox(width: 25),
