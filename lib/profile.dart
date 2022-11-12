@@ -38,8 +38,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.symmetric(
-            horizontal: 15,
-            vertical: 10,
+            horizontal: 5,
+            vertical: 5,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         StaggeredGridTile.count(
           crossAxisCellCount: 1,
-          mainAxisCellCount: 1.3,
+          mainAxisCellCount: 1.1,
           child: BlockMenuContainer(
             color: Colors.brown,
             icon: Icons.food_bank,
@@ -73,7 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         StaggeredGridTile.count(
           crossAxisCellCount: 1,
-          mainAxisCellCount: 1.1,
+          mainAxisCellCount: 1.3,
           child: BlockMenuContainer(
             color: Colors.brown,
             icon: Icons.notifications,
@@ -91,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         StaggeredGridTile.count(
           crossAxisCellCount: 1,
-          mainAxisCellCount: 1.4,
+          mainAxisCellCount: 1.3,
           child: BlockMenuContainer(
             color: Colors.brown,
             isSmall: false,
@@ -106,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         StaggeredGridTile.count(
           crossAxisCellCount: 1,
-          mainAxisCellCount: 1.2,
+          mainAxisCellCount: 1.1,
           child: BlockMenuContainer(
             color: Colors.brown,
             isSmall: false,
@@ -130,7 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Navigator.push(context, MaterialPageRoute(builder: ((context) => const IdentityScreen())));
               //Navigator.pushNamed(context, Routes.todaysTask);
             },
-            blockTittle: "VERIFICAR IDENTIDAD",
+            blockTittle: "MI PERFIL",
           ),
         ),
       ],

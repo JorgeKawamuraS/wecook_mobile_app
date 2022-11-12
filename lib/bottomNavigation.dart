@@ -19,9 +19,16 @@ class _bottomNavigationState extends State<bottomNavigation> {
   List<Widget> _paginas =[
     home(),
     SearchRecipe(),
-    ProfileScreen(),
+    CreateRecipeScreen(),
     globals.isLoggedIn ? ProfileScreen() : login(),
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _paginaActual = globals.idNavigation;
+  }
 
   @override
   Widget build(BuildContext context) {
