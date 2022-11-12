@@ -5,6 +5,7 @@ import 'package:wecookmobile/api/service.dart';
 import 'api/multimedia.dart';
 import 'recipe_detail.dart';
 import 'globals.dart' as globals;
+import 'dart:convert';
 
 class home extends StatelessWidget {
   const home({Key? key}) : super(key: key);
@@ -45,6 +46,9 @@ class home extends StatelessWidget {
                               future:service.getMultimediaByRecipeId(recipe.id),
                                 builder: (context,snapshotMultimedia){
                                 var image=snapshotMultimedia.data!;
+                                var imageD=Base64Decoder().convert(image.url);
+                                print(imageD);
+                                if(snapshotMultimedia.hasData){
                                   return GestureDetector(
                                     onTap: (){
                                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>recipe_detail(r:recipe,m:image)));
@@ -53,15 +57,20 @@ class home extends StatelessWidget {
                                       color: Color(0xFF89250A),
                                       child: Column(
                                         children: [
+                                          Image.memory(imageD),
+                                         // Image.network(imageD,width: double.infinity,fit:BoxFit.fitHeight,height: 130,),
+                                          SizedBox(height: 7,),
+                                          Text(recipe.name.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
+                                        ],
+                                      ),
 
-                                        Image.network(image.url,width: double.infinity,fit:BoxFit.fitHeight,height: 130,),
-                                        SizedBox(height: 7,),
-                                        Text(recipe.name.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
-                                    ],
-                                  ),
+                                    ),
+                                  );
+                                }
+                                else{
+                                  return Container();
+                                }
 
-                                ),
-                              );
                             },
                             );
                           });

@@ -40,7 +40,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
   updateSubscription(int profileId, double amount, bool subs, bool tips) async {
     var jsonResponse = null;
-    Uri myUri = Uri.parse("http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/profiles/$profileId");
+    Uri myUri = Uri.parse("${globals.url}profiles/$profileId");
 
     var response = await http.put(myUri, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',

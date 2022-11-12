@@ -12,10 +12,10 @@ import 'package:wecookmobile/helpers/chip_model.dart';
 class bottomNavigation extends StatefulWidget {
   //const bottomNavigation({Key? key}) : super(key: key);
 
-  int r;
+ // int r;
   List<ChipModel> chips;
 
-  bottomNavigation({required this.r,required this.chips});
+  bottomNavigation({required this.chips});
 
   @override
   State<bottomNavigation> createState() => _bottomNavigationState();
@@ -42,7 +42,6 @@ class _bottomNavigationState extends State<bottomNavigation> {
 
     ing = widget.chips;
 
-    log("pepepepe");
     inspect(ing);
 
     _paginas =[
@@ -58,17 +57,17 @@ class _bottomNavigationState extends State<bottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _paginas[widget.r],
+      body: _paginas[_paginaActual],
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
         onTap:(index){
           setState(() {
-            widget.r=index;
+            _paginaActual=index;
           });
         },
-        currentIndex: widget.r,
+        currentIndex: _paginaActual,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home),label:"Home"),
           BottomNavigationBarItem(icon: Icon(Icons.search),label:"Buscar"),

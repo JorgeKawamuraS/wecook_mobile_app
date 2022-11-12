@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -27,6 +28,8 @@ class _recipe_detailState extends State<recipe_detail> {
   final TextEditingController _comment = TextEditingController();
   late int _status;
 
+  late final imageD;
+
   @override
   void initState() {
     super.initState();
@@ -36,6 +39,7 @@ class _recipe_detailState extends State<recipe_detail> {
     ///late String preparation=widget.r.preparation;
     // print(preparation);
     // late List <String> _steps=preparation.split(".");
+    imageD=Base64Decoder().convert(widget.m.url);
     print(widget._steps);
     print(widget._steps.length);
     print(widget._steps[0]);
@@ -51,8 +55,8 @@ class _recipe_detailState extends State<recipe_detail> {
       SingleChildScrollView(
         child: Column(
           children: [
-            Image.network(widget.m.url,width: double.infinity,fit:BoxFit.fitHeight,),
-
+           // Image.network(widget.m.url,width: double.infinity,fit:BoxFit.fitHeight,),
+            Image.memory(imageD),
             SizedBox(height: 15,),
             Padding(
               padding: const EdgeInsets.only(top: 20,left: 20,right: 20),
@@ -104,21 +108,27 @@ class _recipe_detailState extends State<recipe_detail> {
                   SizedBox(height: 10,),
 
                   FutureBuilder<Profile>(
-                    future:service.getProfileById(),
+                    future:service.getObjectProfileById(widget.r.id),
                     builder: (context, snapshot){
                       var profile=snapshot.data!;
-                      return Card(
-                        color: Color(0xFF89250A),
-                        child: Column(
-                          children: [
-                            Image.network(profile.profilePictureUrl,width: 150,fit:BoxFit.fitHeight,height: 130,),
-                            SizedBox(height: 7,),
-                            Text(profile.name.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
-                            SizedBox(height: 7,),
-                          ],
-                        ),
+                      if(snapshot.hasData){
+                        return Card(
+                          color: Color(0xFF89250A),
+                          child: Column(
+                            children: [
+                              Image.network(profile.profilePictureUrl,width: 150,fit:BoxFit.fitHeight,height: 130,),
+                              SizedBox(height: 7,),
+                              Text(profile.name.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
+                              SizedBox(height: 7,),
+                            ],
+                          ),
 
-                      );
+                        );
+                      }
+                      else{
+                        return Container();
+                      }
+
 
                     },
                   ),

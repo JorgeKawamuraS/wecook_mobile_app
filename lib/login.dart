@@ -94,13 +94,15 @@ class _loginState extends State<login> {
                           ),
                           onPressed: () async {
                             _user= await service.login(_email.text,_password.text);
+                            log('user: $_user');
                             setState(() {
-                              log('result: $_user');
+                              //log('result: $_user');
                             });
                             if(_user!=0){
-                              globals.userId=_user;
+                              globals.idProfileLogged=_user;
                               globals.isLoggedIn = true;
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>bottomNavigation(r:0, chips: [],)));
+                              globals.idNavigation = 0;
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>bottomNavigation(chips: [],)));
                             }
                             else{
                               log('no login');

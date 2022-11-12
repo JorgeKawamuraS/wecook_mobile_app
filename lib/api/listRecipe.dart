@@ -9,14 +9,14 @@ class listRecipe{
    // log('listadoRecipepre: $listaJson');
     if(listaJson!=null){
       for(var c in listaJson){
-        log('c: $c');
+        //log('c: $c');
         final ca=Recipe.objJson(c);
         final e=ca.id;
         final ing=ca.ingredients;
-        log("id:$e");
-        log("ingre:$ing");
-        log('ca: $ca');
-        inspect(ca);
+        // log("id:$e");
+        // log("ingre:$ing");
+        // log('ca: $ca');
+        // inspect(ca);
         listadoRecipe.add(ca);
         //log('aaaaa: $listadoRecipe');
       }

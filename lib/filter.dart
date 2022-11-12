@@ -7,6 +7,7 @@ import 'package:wecookmobile/api/service.dart';
 import 'search_recipe.dart';
 import 'bottomNavigation.dart';
 import 'package:wecookmobile/helpers/chip_model.dart';
+import 'globals.dart' as globals;
 
 class filter extends StatefulWidget {
   //const filter({Key? key}) : super(key: key);
@@ -192,7 +193,8 @@ class _filterState extends State<filter> {
                 primary: Color(0xff89250A),
               ),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>bottomNavigation(r: 1,chips: _chipList)));
+                globals.idNavigation = 1;
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>bottomNavigation(chips: _chipList)));
               },
               child: Padding(
                 padding: const EdgeInsets.all(15),

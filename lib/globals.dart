@@ -4,4 +4,5 @@ bool isLoggedIn = false;
 int idProfileLogged = 0;
 int idNavigation = 0;
 int userId=0;
+String url='http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/';
 

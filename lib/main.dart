@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Montserrat',
         primarySwatch: Colors.brown,
       ),
-      home: bottomNavigation(r:0,chips: []),
+      home: bottomNavigation(chips: []),
     );
   }
 }

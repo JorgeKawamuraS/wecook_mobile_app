@@ -11,6 +11,7 @@ import 'listIngredient.dart';
 import 'package:wecookmobile/api/comment.dart';
 import 'listComment.dart';
 import 'user.dart';
+import 'package:wecookmobile/globals.dart' as globals;
 
 
 
@@ -19,7 +20,7 @@ class service{
 
   static Future<List<Ingredient>> getAllIngredients() async{
 
-    final rspta = await http.get(Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/recipes/ingredients'));
+    final rspta = await http.get(Uri.parse('${globals.url}recipes/ingredients'));
 
     if(rspta.statusCode == 200){
       final rsptaJson = json.decode(rspta.body);
@@ -33,7 +34,7 @@ class service{
 
   static Future<List<Recipe>> getRecipe() async{
 
-    final rspta=await http.get(Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/recipes'));
+    final rspta=await http.get(Uri.parse('${globals.url}recipes'));
    //log('data: $rspta');
     if(rspta.statusCode==200){
       final rsptaJson=json.decode(rspta.body);
@@ -50,7 +51,7 @@ class service{
   static Future<List<Profile>> getProfile() async{
 
     //log('getprofile');
-    final rspta=await http.get(Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/profiles'));
+    final rspta=await http.get(Uri.parse('${globals.url}profiles'));
     //log('rptass');
 
 
@@ -66,11 +67,11 @@ class service{
 
   static Future<Profile> getProfileById() async{
 
-    final rspta=await http.get(Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/profiles/1'));
+    final rspta=await http.get(Uri.parse('${globals.url}profiles/1'));
 
     if(rspta.statusCode==200){
       final rsptaJson=json.decode(rspta.body);
-      log('data: $rsptaJson');
+      //log('data: $rsptaJson');
       final profile=Profile.objJson(rsptaJson);
       // log('data222: $todosRecipe');
       //return todosProfile;
@@ -84,14 +85,14 @@ class service{
 
   static Future<Profile> getObjectProfileById(int id) async{
 
-    final rspta=await http.get(Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/profiles/$id'));
+    final rspta=await http.get(Uri.parse('${globals.url}profiles/$id'));
 
-   // log('rspta');
+   log('rspta');
     if(rspta.statusCode==200){
       final rsptaJson=json.decode(rspta.body);
-     // log('data: $rsptaJson');
+     log('data: $rsptaJson');
       final profile=Profile.objJson(rsptaJson);
-      // log('data222: $todosRecipe');
+      log('data222: $profile');
       //return todosProfile;
       return profile;
     }
@@ -105,14 +106,14 @@ class service{
 
     // log('profile id');
 
-    final rspta=await http.get(Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/recipes/$recipeId/multimedia'));
+    final rspta=await http.get(Uri.parse('${globals.url}recipes/$recipeId/multimedia'));
 
-    log('rspta');
+  //  log('rspta');
     if(rspta.statusCode==200){
       final rsptaJson=json.decode(rspta.body);
-      log('data: ${rsptaJson[0]}');
+     // log('data: ${rsptaJson[0]}');
       final multimedia=Multimedia.objJson(rsptaJson[0]);
-      log('data222: $multimedia');
+     // log('data222: $multimedia');
       //return todosProfile;
       return multimedia;
     }
@@ -124,7 +125,7 @@ class service{
 
   static Future<int> login(String email, String password) async {
     final response = await http.post(
-      Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/profiles/users/login'),
+      Uri.parse('${globals.url}profiles/users/login'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -153,7 +154,7 @@ class service{
 
   static Future<List<Comment>> getComment(int recipeId) async{
 
-    final rspta=await http.get(Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/recipes/$recipeId/comments'));
+    final rspta=await http.get(Uri.parse('${globals.url}recipes/$recipeId/comments'));
     //log('data: $rspta');
     if(rspta.statusCode==200){
       final rsptaJson=json.decode(rspta.body);
@@ -167,7 +168,7 @@ class service{
 
   static Future<int> createComment(String text, int profileId,int recipeId) async {
     final response = await http.post(
-      Uri.parse('http://ec2-44-201-122-34.compute-1.amazonaws.com:8093/recipes/$recipeId/comments'),
+      Uri.parse('${globals.url}recipes/$recipeId/comments'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -177,7 +178,7 @@ class service{
       }),
     );
 
-    log((response.statusCode).toString());
+    //log((response.statusCode).toString());
     if (response.statusCode == 201) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
