@@ -104,7 +104,7 @@ class _IdentityScreenState extends State<IdentityScreen> {
           content: Text("Se actualizo correctamente"),
           backgroundColor: Color(0xFFC44C04),
         ));
-        //Navigator.push(context, MaterialPageRoute(builder: ((context) => const ProfileScreen())));
+        //Navigator.push(context, MaterialPageRoute(builder: ((context) => const ProfileMenuScreen())));
       }
     } else {
       print('Response status: ${response.statusCode}');

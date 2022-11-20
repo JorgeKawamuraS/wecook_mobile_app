@@ -17,8 +17,8 @@ class Recipe{
   final String preparation;
   final String recommendation;
   final int profileId;
-  final int cookbookId;
-  // final List<Multimedia> multimedia;
+  //final int cookbookId;
+  final List<Multimedia> multimedia;
   // final List<Tag> tags;
   final List<Ingredient> ingredients;
 
@@ -30,8 +30,8 @@ class Recipe{
     required this.preparation,
     required this.recommendation,
     required this.profileId,
-    required this.cookbookId,
-    // required this.multimedia,
+    //required this.cookbookId,
+    required this.multimedia,
     // required this.tags,
     required this.ingredients
 
@@ -46,8 +46,8 @@ class Recipe{
         preparation:json['preparation'] as String,
         recommendation:json['recommendation'] as String,
         profileId: json['profileId'] as int,
-        cookbookId: json['cookbookId'] as int,
-        // multimedia: json['multimedia'] as List<Multimedia>,
+       // cookbookId: json['cookbookId'] as int,
+        multimedia:  List<Multimedia>.from(json['multimedia'].map((x)=>Multimedia.objJson(x))),
         // tags: json['tags'] as List<Tag>,
         ingredients: List<Ingredient>.from(json['ingredients'].map((x)=>Ingredient.objJson(x)))
         // ingredients: json['ingredients'].map((value)=>

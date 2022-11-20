@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -104,102 +105,124 @@ class _SearchRecipeState extends State<SearchRecipe> {
                   future:_recipes,
                   builder: (context, AsyncSnapshot<List> snapshot){
 
-
-                    if(ingredients.length>0){
-                      log("entro ingredients");
-                      log("ing:${ingredients[0]}");
-                      for(var i=0; i<snapshot.data!.length;i++){
-                        var recipe=snapshot.data![i];
-                        if(recipe.name.toLowerCase().contains(ingredients[0].name.toLowerCase())){
-                          log("igual3");
+                    if(snapshot.hasData){
+                      if(ingredients.length>0){
+                        log("entro ingredients");
+                        log("ing:${ingredients[0]}");
+                        for(var i=0; i<snapshot.data!.length;i++){
+                          var recipe=snapshot.data![i];
+                          if(recipe.name.toLowerCase().contains(ingredients[0].name.toLowerCase())){
+                            log("igual3");
+                            _recipesFiltered.add(recipe);
+                          }
+                        }
+                        // for(var i=0; i<snapshot.data!.length;i++){
+                        //   var recipe=snapshot.data![i];
+                        //   for(var j=0; j<ingredients.length;j++){
+                        //     if(recipe.name.toLowerCase().contains(ingredients[j].name.toLowerCase())){
+                        //       _recipesFiltered.add(recipe);
+                        //     }
+                        //   }
+                        //
+                        // }
+                      }
+                      else if(searchString==""){
+                        for(var i=0; i<snapshot.data!.length;i++){
+                          log("iniciando");
+                          var recipe=snapshot.data![i];
                           _recipesFiltered.add(recipe);
                         }
                       }
-                      // for(var i=0; i<snapshot.data!.length;i++){
-                      //   var recipe=snapshot.data![i];
-                      //   for(var j=0; j<ingredients.length;j++){
-                      //     if(recipe.name.toLowerCase().contains(ingredients[j].name.toLowerCase())){
-                      //       _recipesFiltered.add(recipe);
-                      //     }
-                      //   }
-                      //
-                      // }
-                    }
-                    else if(searchString==""){
-                      for(var i=0; i<snapshot.data!.length;i++){
-                        log("iniciando");
-                        var recipe=snapshot.data![i];
-                        _recipesFiltered.add(recipe);
+                      else {
+                        for(var i=0; i<snapshot.data!.length;i++){
+                          var recipe=snapshot.data![i];
+                          if(recipe.name.toLowerCase().contains(searchString.toLowerCase())){
+                            log("igual3");
+                            _recipesFiltered.add(recipe);
+                          }
+                        }
                       }
+
+                      return Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2 ),
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              physics: ScrollPhysics(),
+                              itemCount: _recipesFiltered.length,
+                              itemBuilder: (context,index){
+                                var recipe=_recipesFiltered[index];
+                                log('filtered:${_recipesFiltered.length}');
+                                return FutureBuilder<Multimedia>(
+                                  future:service.getMultimediaByRecipeId(recipe.id),
+                                  builder: (context,snapshotMultimedia){
+                                    if(snapshotMultimedia.hasData){
+                                      var image=snapshotMultimedia.data!;
+                                      var imageD=Base64Decoder().convert(image.url);
+                                      return GestureDetector(
+                                        onTap: (){
+                                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>recipe_detail(r:recipe,m:image)));
+                                        },
+                                        child: Card(
+                                          color: Color(0xFF89250A),
+                                          child: Column(
+                                            children: [
+                                              Image.memory(imageD,width: double.infinity,fit:BoxFit.fill,height: 130,),
+                                              // Image.network(image.url,width: double.infinity,fit:BoxFit.fitHeight,height: 130,),
+                                              SizedBox(height: 7,),
+                                              Text(recipe.name.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
+                                            ],
+                                          ),
+
+                                        ),
+                                      );
+                                    }
+                                    else {
+                                      return Container(
+                                        child: Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      );
+                                    }
+
+                                  },
+                                );
+                                // return recipe.name.toLowerCase().contains(searchString.toLowerCase())?
+                                //  GestureDetector(
+                                //   onTap: (){
+                                //     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>recipe_detail(r:recipe)));
+                                //   },
+                                //   child: Card(
+                                //     color: Color(0xFF89250A),
+                                //     child: Column(
+                                //       children: [
+                                //
+                                //         Image.network('https://food.fnr.sndimg.com/content/dam/images/food/fullset/2013/12/9/0/FNK_Cheesecake_s4x3.jpg.rend.hgtvcom.616.462.suffix/1387411272847.jpeg',width: double.infinity,fit:BoxFit.fitHeight,height: 120,),
+                                //         SizedBox(height: 7,),
+                                //         Text(recipe.name.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
+                                //       ],
+                                //     ),
+                                //
+                                //   ),
+                                // )
+                                //  : Container();
+
+
+                              }),
+                        ),
+                      );
                     }
+
                     else {
-                      for(var i=0; i<snapshot.data!.length;i++){
-                        var recipe=snapshot.data![i];
-                        if(recipe.name.toLowerCase().contains(searchString.toLowerCase())){
-                          log("igual3");
-                          _recipesFiltered.add(recipe);
-                        }
-                      }
+                      return Container(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
                     }
 
-                    return Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2 ),
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            physics: ScrollPhysics(),
-                            itemCount: _recipesFiltered.length,
-                            itemBuilder: (context,index){
-                             var recipe=_recipesFiltered[index];
-                             log('filtered:${_recipesFiltered.length}');
-                             return FutureBuilder<Multimedia>(
-                               future:service.getMultimediaByRecipeId(recipe.id),
-                               builder: (context,snapshotMultimedia){
-                                 var image=snapshotMultimedia.data!;
-                                 return GestureDetector(
-                                   onTap: (){
-                                     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>recipe_detail(r:recipe,m:image)));
-                                   },
-                                   child: Card(
-                                     color: Color(0xFF89250A),
-                                     child: Column(
-                                       children: [
 
-                                         Image.network(image.url,width: double.infinity,fit:BoxFit.fitHeight,height: 130,),
-                                         SizedBox(height: 7,),
-                                         Text(recipe.name.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
-                                       ],
-                                     ),
-
-                                   ),
-                                 );
-                               },
-                             );
-                              // return recipe.name.toLowerCase().contains(searchString.toLowerCase())?
-                              //  GestureDetector(
-                              //   onTap: (){
-                              //     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>recipe_detail(r:recipe)));
-                              //   },
-                              //   child: Card(
-                              //     color: Color(0xFF89250A),
-                              //     child: Column(
-                              //       children: [
-                              //
-                              //         Image.network('https://food.fnr.sndimg.com/content/dam/images/food/fullset/2013/12/9/0/FNK_Cheesecake_s4x3.jpg.rend.hgtvcom.616.462.suffix/1387411272847.jpeg',width: double.infinity,fit:BoxFit.fitHeight,height: 120,),
-                              //         SizedBox(height: 7,),
-                              //         Text(recipe.name.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
-                              //       ],
-                              //     ),
-                              //
-                              //   ),
-                              // )
-                              //  : Container();
-
-
-                            }),
-                      ),
-                    );
 
                   },
                 ),

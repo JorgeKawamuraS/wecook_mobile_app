@@ -5,6 +5,7 @@ import 'package:wecookmobile/home.dart';
 import 'package:wecookmobile/login.dart';
 import 'package:wecookmobile/search_recipe.dart';
 import 'package:wecookmobile/create_recipe.dart';
+import 'package:wecookmobile/profile_menu.dart';
 import 'package:wecookmobile/profile.dart';
 import 'globals.dart' as globals;
 import 'package:wecookmobile/helpers/chip_model.dart';
@@ -25,10 +26,11 @@ class _bottomNavigationState extends State<bottomNavigation> {
 
   int _paginaActual=0;
   List<Widget> _paginas =[
-    home(),
+    //home(),
+    ProfileScreen(),
     SearchRecipe(chips: [],),
     CreateRecipeScreen(),
-    globals.isLoggedIn ? ProfileScreen() : login(),
+    globals.isLoggedIn ? ProfileMenuScreen() : login(),
   ];
 
   late List<ChipModel> ing;
@@ -45,10 +47,12 @@ class _bottomNavigationState extends State<bottomNavigation> {
     inspect(ing);
 
     _paginas =[
-      home(),
+      //home(),
+      ProfileScreen(),
       SearchRecipe(chips: ing),
+      //home(),
       CreateRecipeScreen(),
-      globals.isLoggedIn ? ProfileScreen() : login(),
+      globals.isLoggedIn ? ProfileMenuScreen() : login(),
     ];
 
   }

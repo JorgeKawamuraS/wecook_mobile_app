@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:wecookmobile/api/comment.dart';
 import 'api/multimedia.dart';
 import 'api/profile.dart';
 import 'api/recipe.dart';
@@ -27,6 +28,7 @@ class _recipe_detailState extends State<recipe_detail> {
 
   final TextEditingController _comment = TextEditingController();
   late int _status;
+  late int _statusCookbook;
 
   late final imageD;
 
@@ -62,10 +64,137 @@ class _recipe_detailState extends State<recipe_detail> {
               padding: const EdgeInsets.only(top: 20,left: 20,right: 20),
               child: Column(
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(this.widget.r.name, style: TextStyle(fontSize: 25,fontWeight:FontWeight.bold )),
-                  ),
+                  Row(children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(this.widget.r.name, style: TextStyle(fontSize: 25,fontWeight:FontWeight.bold )),
+                    ),
+                    Spacer(),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xff89250A),
+                      ),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                scrollable: true,
+                                content: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+
+                                    child: Column(
+                                      children: [
+                                        Text('Guardar en recetario'),
+                                        Divider(
+                                            color: Colors.black
+                                        ),
+                                        Container(
+                                          height: 200,
+                                          width: 200,
+                                          child: FutureBuilder(
+                                                initialData: [],
+                                                future:service.getCookbookByProfileId(globals.idProfileLogged),
+                                                builder: (context, AsyncSnapshot<List> snapshot){
+                                                  return  ListView.builder(
+                                                      //scrollDirection: Axis.vertical,
+                                                      //shrinkWrap: true,
+                                                      itemCount:snapshot.data!.length,
+                                                      itemBuilder: (context,index){
+                                                        var cb=snapshot.data![index];
+                                                        return ListTile(
+                                                          title: Text(cb.name.toString()),
+                                                          onTap: () async {
+                                                            log(cb.name.toString());
+                                                            if(globals.idProfileLogged!=0){
+                                                              _statusCookbook= await service.assignCookbookRecipe(this.widget.r.id, cb.id);
+                                                              log(_statusCookbook.toString());
+                                                              if(_statusCookbook==201){
+                                                                log("clear cookbook");
+                                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                    content: Text("Receta guardada satisfactoriamente.")));
+                                                              }
+                                                              setState(() {});
+                                                              Navigator.pop(context);
+                                                            }
+                                                            else{
+                                                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                content: Text("Inicia sesión para guardar una receta"),
+                                                                backgroundColor: Color(0xFFC44C04),
+                                                              ));
+                                                            }
+                                                          },
+                                                        );
+                                                      });
+                                                  // return GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2 ),
+                                                  //     shrinkWrap: true,
+                                                  //     itemCount: snapshot.data!.length,
+                                                  //     itemBuilder: (context,index){
+                                                  //       var cookbook=snapshot.data![index];
+                                                  //       if(snapshot.hasData){
+                                                  //         return GestureDetector(
+                                                  //           onTap: (){
+                                                  //             //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>recipe_detail(r:recipe,m:image)));
+                                                  //           },
+                                                  //           child: Card(
+                                                  //             color: Color(0xFF89250A),
+                                                  //             child: Column(
+                                                  //               children: [
+                                                  //
+                                                  //                 //Image.memory(Base64Decoder().convert(image.url),width: double.infinity,fit:BoxFit.fitHeight,height: 130,),
+                                                  //                 // Image.network(imageD,width: double.infinity,fit:BoxFit.fitHeight,height: 130,),
+                                                  //                 SizedBox(height: 7,),
+                                                  //                 Text(cookbook.name.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
+                                                  //               ],
+                                                  //             ),
+                                                  //
+                                                  //           ),
+                                                  //         );
+                                                  //       }
+                                                  //       return Center(child:Text("Loading..."));
+                                                  //
+                                                  //     });
+
+                                                },
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+
+
+
+                                ),
+                                actions: [
+                                  // RaisedButton(
+                                  //     child: Text("Aceptar"),
+                                  //     onPressed: () async {
+                                  //       log(_nameCookbook.text);
+                                  //       _status= await service.createCookbook(_nameCookbook.text, globals.idProfileLogged);
+                                  //       log(_status.toString());
+                                  //       if(_status==201) {
+                                  //         log("clear");
+                                  //         _nameCookbook.clear();
+                                  //       }
+                                  //       setState(() {});
+                                  //       Navigator.pop(context);
+                                  //     }
+                                  // )
+                                ],
+                              );
+                            });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text("Guardar",
+                            style: TextStyle(
+                              //fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.white,
+                            )),
+                      ),
+                    ),
+                  ],),
+
                   SizedBox(height: 15,),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -90,7 +219,7 @@ class _recipe_detailState extends State<recipe_detail> {
                   ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
-                    itemCount:3,
+                    itemCount:widget._steps.length,
                       itemBuilder: (context,index){
                       var step=widget._steps[index];
                       var i=index+1;
@@ -108,15 +237,18 @@ class _recipe_detailState extends State<recipe_detail> {
                   SizedBox(height: 10,),
 
                   FutureBuilder<Profile>(
-                    future:service.getObjectProfileById(widget.r.id),
+                    future:service.getObjectProfileById(widget.r.profileId),
                     builder: (context, snapshot){
-                      var profile=snapshot.data!;
+
                       if(snapshot.hasData){
+                        var profile=snapshot.data!;
+                        var imageD=Base64Decoder().convert(profile.profilePictureUrl);
                         return Card(
                           color: Color(0xFF89250A),
                           child: Column(
                             children: [
-                              Image.network(profile.profilePictureUrl,width: 150,fit:BoxFit.fitHeight,height: 130,),
+                              Image.memory(imageD, width: 150,fit:BoxFit.fitWidth,height: 130,),
+                              //Image.network(profile.profilePictureUrl,width: 150,fit:BoxFit.fitHeight,height: 130,),
                               SizedBox(height: 7,),
                               Text(profile.name.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
                               SizedBox(height: 7,),
@@ -125,8 +257,12 @@ class _recipe_detailState extends State<recipe_detail> {
 
                         );
                       }
-                      else{
-                        return Container();
+                      else {
+                        return Container(
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
                       }
 
 
@@ -152,13 +288,23 @@ class _recipe_detailState extends State<recipe_detail> {
                       labelText: 'Agrega un Comentario',
                       suffixIcon:IconButton(
                           onPressed: () async {
-                            _status= await service.createComment(_comment.text, globals.userId, widget.r.id);
-                            log(_status.toString());
-                            if(_status==201){
-                              log("clear");
-                              _comment.clear();
-                              setState(() {});
+                            log('idUserD:${globals.idProfileLogged}');
+                            if(globals.idProfileLogged!=0){
+                              _status= await service.createComment(_comment.text, globals.idProfileLogged, widget.r.id);
+                              log(_status.toString());
+                              if(_status==201){
+                                log("clear");
+                                _comment.clear();
+                                setState(() {});
+                              }
                             }
+                            else{
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                content: Text("Inicia sesión para agregar un comentario"),
+                                backgroundColor: Color(0xFFC44C04),
+                              ));
+                            }
+
 
                           },
                           icon: Icon(
@@ -184,15 +330,26 @@ class _recipe_detailState extends State<recipe_detail> {
                           shrinkWrap: true,
                           itemCount:snapshot.data!.length,
                           itemBuilder: (context,index){
-                            var comment=snapshot.data![index];
+                            Comment comment=snapshot.data![index];
+                            log('commentprofileid:${comment.profileId}');
                             return FutureBuilder<Profile>(
-                              future:service.getProfileById(),
-                              builder: (context, snapshot){
-                                var profile=snapshot.data!;
-                                return ListTile(
-                                  title: Text(profile.name.toString()),
-                                  subtitle: Text(comment.text.toString()),
-                                );
+                              future:service.getObjectProfileById(comment.profileId),
+                              builder: (context, snapshotP){
+                                if(snapshotP.hasData){
+                                  var profile=snapshotP.data!;
+                                  return ListTile(
+                                    title: Text(profile.name.toString()),
+                                    subtitle: Text(comment.text.toString()),
+                                  );
+                                }
+                                else {
+                                  return Container(
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                }
+
                               },
                             );
 

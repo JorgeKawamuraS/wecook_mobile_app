@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scaled_list/scaled_list.dart';
 import 'package:wecookmobile/api/service.dart';
 import 'api/multimedia.dart';
+import 'api/profile.dart';
 import 'recipe_detail.dart';
 import 'globals.dart' as globals;
 import 'dart:convert';
@@ -37,42 +40,53 @@ class home extends StatelessWidget {
                       return GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2 ),
                           shrinkWrap: true,
                           itemCount: snapshot.data!.length,
-                          //itemCount: 4,
                           itemBuilder: (context,index){
                             var recipe=snapshot.data![index];
                            // var image=service.getMultimediaByRecipeId(recipe.id);
                             //var recipe=recipes[index];
-                            return FutureBuilder<Multimedia>(
-                              future:service.getMultimediaByRecipeId(recipe.id),
+                            if(snapshot.hasData){
+                              return FutureBuilder<Multimedia>(
+                                future:service.getMultimediaByRecipeId(recipe.id),
                                 builder: (context,snapshotMultimedia){
-                                var image=snapshotMultimedia.data!;
-                                var imageD=Base64Decoder().convert(image.url);
-                                print(imageD);
-                                if(snapshotMultimedia.hasData){
-                                  return GestureDetector(
-                                    onTap: (){
-                                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>recipe_detail(r:recipe,m:image)));
-                                    },
-                                    child: Card(
-                                      color: Color(0xFF89250A),
-                                      child: Column(
-                                        children: [
-                                          Image.memory(imageD),
-                                         // Image.network(imageD,width: double.infinity,fit:BoxFit.fitHeight,height: 130,),
-                                          SizedBox(height: 7,),
-                                          Text(recipe.name.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
-                                        ],
+                                  //var imageD=Base64Decoder().convert(image.url);
+                                  if (snapshotMultimedia.hasData){
+                                    var image=snapshotMultimedia.data!;
+                                    return GestureDetector(
+                                      onTap: (){
+                                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>recipe_detail(r:recipe,m:image)));
+                                      },
+                                      child: Card(
+                                        color: Color(0xFF89250A),
+                                        child: Column(
+                                          children: [
+
+                                            Image.memory(Base64Decoder().convert(image.url),width: double.infinity,fit:BoxFit.fill,height: 130,),
+                                            // Image.network(imageD,width: double.infinity,fit:BoxFit.fitHeight,height: 130,),
+                                            SizedBox(height: 7,),
+                                            Text(recipe.name.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
+                                          ],
+                                        ),
+
                                       ),
+                                    );
+                                  }
+                                  else {
+                                    return Container(
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    );
+                                  }
 
-                                    ),
-                                  );
-                                }
-                                else{
-                                  return Container();
-                                }
 
-                            },
-                            );
+                                  }
+
+
+
+                              );
+                            }
+                            return Center(child:Text("Loading..."));
+
                           });
 
                     },
@@ -93,22 +107,32 @@ class home extends StatelessWidget {
                       itemCount: snapshot.data!.length,
                      // itemCount: 2,
                       itemBuilder: (context,index){
-                        var profile=snapshot.data![index];
-                        //var recipe=users[index];
-                        return index<2 ?
-                        Card(
-                          color: Color(0xFF89250A),
-                          child: Column(
-                            children: [
+                    if(snapshot.hasData){
+                      Profile profile=snapshot.data![index];
+                      //var recipe=users[index];
+                      return index<2 ?
+                      Card(
+                        color: Color(0xFF89250A),
+                        child: Column(
+                          children: [
+                            Image.memory(Base64Decoder().convert(profile.profilePictureUrl),width: double.infinity,fit:BoxFit.fitWidth,height: 130,),
+                            // Image.network(profile.profilePictureUrl,width: double.infinity,fit:BoxFit.fitHeight,height: 130,),
+                            SizedBox(height: 10,),
+                            Text(profile.name.toString(),style: TextStyle(color: Colors.white),),
+                          ],
+                        ),
+                      )
+                          :
+                      Container();
+                    }
+                    else {
+                      return Container(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
 
-                              Image.network(profile.profilePictureUrl,width: double.infinity,fit:BoxFit.fitHeight,height: 130,),
-                              SizedBox(height: 10,),
-                              Text(profile.name.toString(),style: TextStyle(color: Colors.white),),
-                            ],
-                          ),
-                        )
-                            :
-                        Container();
                       });
 
                 },

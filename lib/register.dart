@@ -64,7 +64,7 @@ class _registerState extends State<register> {
         //   content: Text("Se registro correctamente"),
         //   backgroundColor: Color(0xFFC44C04),
         // ));
-        // Navigator.push(context, MaterialPageRoute(builder: ((context) => const ProfileScreen())));
+        // Navigator.push(context, MaterialPageRoute(builder: ((context) => const ProfileMenuScreen())));
       }
     } else {
       print('Response status: ${response.statusCode}');
