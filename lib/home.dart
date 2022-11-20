@@ -17,7 +17,7 @@ class home extends StatelessWidget {
   Widget build(BuildContext context) {
 
     print("HOME");
-    print(globals.userId);
+   // print(globals.userId);
 
     print(globals.isLoggedIn);
 

@@ -86,15 +86,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                           SizedBox(
                             height: 10,
                           ),
-                          Text("@usuario"),
+                          Text('@${profile.username}'),
                           SizedBox(
                             height: 5,
                           ),
                           FittedBox(
                               fit: BoxFit.fill,
-                              child: Text(
-                                "Lorem ipsum dolor sit amet.",
-                              ))
+                              child: Text( profile.description ))
                         ],
                       )
                     ],

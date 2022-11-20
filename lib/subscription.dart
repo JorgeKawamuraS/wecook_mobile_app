@@ -53,7 +53,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         'subscribersPrice': amount,
         'subsOn': subsOn,
         'tipsOn': tipsOn,
-        'dni': profile.dni
+        'dni': profile.dni,
+        'username': profile.username,
+        'description': profile.description
       }),
     );
 

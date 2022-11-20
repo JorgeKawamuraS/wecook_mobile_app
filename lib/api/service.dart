@@ -317,10 +317,10 @@ class service{
 
   static Future<int> assignCookbookRecipe(int recipeId,int cookbookId) async {
     final response = await http.post(
-      Uri.parse('${globals.url}recipes/$recipeId/cookbooks/$cookbookId'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      }
+        Uri.parse('${globals.url}recipes/$recipeId/cookbooks/$cookbookId'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        }
     );
 
     log("cookbookId:$cookbookId");
@@ -343,6 +343,8 @@ class service{
       // then throw an exception.
       return 0;
     }
+  }
+
   static Future<List<Recipe>> getAllRecipesByProfileId(int profileId) async{
 
     final rspta = await http.get(Uri.parse('${globals.url}recipes/profiles/$profileId/recipes'));

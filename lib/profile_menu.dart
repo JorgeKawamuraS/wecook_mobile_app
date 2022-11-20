@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:wecookmobile/identity.dart';
+import 'package:wecookmobile/profile.dart';
+import 'package:wecookmobile/statistic.dart';
 import 'package:wecookmobile/subscription.dart';
 import 'package:wecookmobile/widgets/block_menu.dart';
+import 'bottomNavigation.dart';
+import 'globals.dart' as globals;
 
 class ProfileMenuScreen extends StatefulWidget {
   const ProfileMenuScreen({ Key? key }) : super(key: key);
@@ -31,24 +35,24 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
 
-      appBar: AppBar(
+        appBar: AppBar(
 
-      ),
+        ),
 
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.symmetric(
-            horizontal: 5,
-            vertical: 5,
+        body: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.symmetric(
+              horizontal: 5,
+              vertical: 5,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                buildGrid(),
+              ],
+            ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildGrid(),
-            ],
-          ),
-        ),  
-      )
+        )
     );
   }
 
@@ -67,7 +71,7 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
             isSmall: false,
             blockTittle: "MIS RECETAS",
             onTap: () {
-              //Navigator.push(context, MaterialPageRoute(builder: ((context) => const ActionsMyCategoriesScreen())));
+              Navigator.push(context, MaterialPageRoute(builder: ((context) => const ProfileScreen())));
             },
           ),
         ),
@@ -76,11 +80,14 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
           mainAxisCellCount: 1.3,
           child: BlockMenuContainer(
             color: Colors.brown,
-            icon: Icons.notifications,
+            icon: Icons.logout,
             isSmall: false,
             //blockSubLabel: "10 Páginas",
-            blockTittle: "NOTIFICACIONES",
+            blockTittle: "CERRAR SESIÓN",
             onTap: () {
+              globals.isLoggedIn = false;
+              globals.idNavigation = 3;
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>bottomNavigation(chips: [])));
               // Navigator.push(
               // context,
               // MaterialPageRoute(
@@ -113,6 +120,7 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
             icon: Icons.note,
             //blockSubLabel: "9 Insignias",
             onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: ((context) => const StatisticScreen())));
               //Navigator.pushNamed(context, Routes.todaysTask);
             },
             blockTittle: "ESTADÍSTICAS",

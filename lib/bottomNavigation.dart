@@ -29,7 +29,7 @@ class _bottomNavigationState extends State<bottomNavigation> {
     home(),
     SearchRecipe(chips: [],),
     CreateRecipeScreen(),
-    globals.isLoggedIn ? ProfileScreen() : login(),
+    globals.isLoggedIn ? ProfileMenuScreen() : login(),
   ];
 
   late List<ChipModel> ing;
@@ -49,7 +49,7 @@ class _bottomNavigationState extends State<bottomNavigation> {
       home(),
       SearchRecipe(chips: ing),
       CreateRecipeScreen(),
-      globals.isLoggedIn ? ProfileScreen() : login(),
+      globals.isLoggedIn ? ProfileMenuScreen() : login(),
     ];
 
   }
