@@ -18,7 +18,7 @@ class register extends StatefulWidget {
 class _registerState extends State<register> {
 
   final TextEditingController nameController = new TextEditingController();
-  final TextEditingController dniController = new TextEditingController();
+  final TextEditingController usernameController = new TextEditingController();
   final TextEditingController emailController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
 
@@ -31,7 +31,7 @@ class _registerState extends State<register> {
   int photo = 0;
   String base64string = "";
 
-  registerProfile(int userId, String name, String photo, int dni) async {
+  registerProfile(int userId, String name, String photo, String username) async {
     var jsonResponse = null;
     Uri myUri = Uri.parse("${globals.url}profiles/users/$userId/profiles");
 
@@ -44,9 +44,11 @@ class _registerState extends State<register> {
         'suscribersPrice': 0,
         'gender': "Seleccionar",
         'birthdate': "0001-01-01T00:00:00.000+00:00",
-        'dni': dni,
+        'dni': 0,
         'subsOn': false,
-        'tipsOn': false
+        'tipsOn': false,
+        'username': username,
+        'description': 'Soy $name'
       }),
     );
 
@@ -64,7 +66,7 @@ class _registerState extends State<register> {
         //   content: Text("Se registro correctamente"),
         //   backgroundColor: Color(0xFFC44C04),
         // ));
-        // Navigator.push(context, MaterialPageRoute(builder: ((context) => const ProfileMenuScreen())));
+        // Navigator.push(context, MaterialPageRoute(builder: ((context) => const ProfileScreen())));
       }
     } else {
       print('Response status: ${response.statusCode}');
@@ -76,7 +78,7 @@ class _registerState extends State<register> {
     }
   }
 
-  registerUser(String email, String password, String name, String photo, int dni) async {
+  registerUser(String email, String password, String name, String photo, String username) async {
     var jsonResponse = null;
     Uri myUri = Uri.parse("${globals.url}profiles/users/register");
 
@@ -95,7 +97,7 @@ class _registerState extends State<register> {
       print('Response body: ${response.body}');
       if(jsonResponse != null) {
         userId = jsonResponse["id"];
-        registerProfile(userId, name, photo, dni);
+        registerProfile(userId, name, photo, username);
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Se registro correctamente"),
           backgroundColor: Color(0xFFC44C04),
@@ -228,7 +230,7 @@ class _registerState extends State<register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFC44C04),
+      backgroundColor: const Color(0xFFC44C04),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -245,7 +247,7 @@ class _registerState extends State<register> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   //borderRadius: BorderRadius.circular(15),
                 ),
@@ -254,7 +256,7 @@ class _registerState extends State<register> {
                   child: TextField(
                     controller: nameController,
                     keyboardType: TextInputType.name,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border:InputBorder.none,
                       hintText: 'Nombre',
                     ),
@@ -266,18 +268,18 @@ class _registerState extends State<register> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   //borderRadius: BorderRadius.circular(15),
                 ),
                 child:Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: TextField(
-                    controller: dniController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
+                    controller: usernameController,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
                       border:InputBorder.none,
-                      hintText: 'DNI',
+                      hintText: 'Username',
                     ),
                   ),
                 ),
@@ -315,7 +317,7 @@ class _registerState extends State<register> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   //borderRadius: BorderRadius.circular(15),
                 ),
@@ -325,7 +327,7 @@ class _registerState extends State<register> {
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                     //obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border:InputBorder.none,
                       hintText: 'Correo',
                     ),
@@ -337,7 +339,7 @@ class _registerState extends State<register> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   //borderRadius: BorderRadius.circular(15),
                 ),
@@ -347,7 +349,7 @@ class _registerState extends State<register> {
                     controller: passwordController,
                     keyboardType: TextInputType.visiblePassword,
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border:InputBorder.none,
                       hintText: 'Contraseña',
                     ),
@@ -371,8 +373,8 @@ class _registerState extends State<register> {
                         ),
                         onPressed: () {
                           //print('PHOTOOOOO ' + base64string);
-                          if (emailController.text.length > 0 && passwordController.text.length > 0 && base64string.length > 0 && int.parse(dniController.text) > 0) {
-                            registerUser(emailController.text, passwordController.text, nameController.text, base64string, int.parse(dniController.text));                 
+                          if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty && base64string.isNotEmpty && usernameController.text.isNotEmpty){
+                            registerUser(emailController.text, passwordController.text, nameController.text, base64string, usernameController.text);                 
                             globals.isLoggedIn = true;
                             globals.idNavigation = 0;
                             Navigator.of(context).push(MaterialPageRoute(builder: (context)=>bottomNavigation( chips: [],)));
@@ -383,8 +385,8 @@ class _registerState extends State<register> {
                             ));
                           }
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.all(15),
+                        child: const Padding(
+                          padding: EdgeInsets.all(15),
                           child: Text("Registrarse",style:TextStyle(
                             //fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -404,14 +406,14 @@ class _registerState extends State<register> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("¿Ya tienes una cuenta? ", style: TextStyle(
+                const Text("¿Ya tienes una cuenta? ", style: TextStyle(
                   color: Colors.white,
                 ),),
                 GestureDetector(
                   onTap: (){
                     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>login()));
                   },
-                  child: Text("Inicia Sesión", style: TextStyle(
+                  child: const Text("Inicia Sesión", style: TextStyle(
                     fontWeight: FontWeight.bold,color:Colors.white,
                   ),),
                 )

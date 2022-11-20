@@ -176,7 +176,6 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
         'preparation': preparation,
         'recommendation': recommendation,
         'profileId': globals.idProfileLogged,
-        'cookbookId': 1
       }),
     );
 

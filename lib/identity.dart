@@ -27,11 +27,13 @@ class _IdentityScreenState extends State<IdentityScreen> {
   String gender = 'Seleccionar'; 
   TextEditingController dateController = TextEditingController(); 
   TextEditingController dniController = TextEditingController(); 
+  TextEditingController descriptionController = TextEditingController(); 
 
   bool controlName = true;  
   var controlGender = null;
   bool controlDni = true;
   bool controlDate = true; 
+  bool controlDescription = true; 
 
   late final Future _future;
   late Profile profile;
@@ -66,7 +68,15 @@ class _IdentityScreenState extends State<IdentityScreen> {
       if (value.birthdate != "0001-01-01T00:00:00.000+00:00") {
         dateController.text = value.birthdate.substring(0,10),
       },
-      dniController.text = value.dni.toString(),
+      if (value.dni == 0) {
+        dniController.text = '',
+      },
+      if (value.dni > 0) {
+        dniController.text = value.dni.toString(),
+      },
+      if (value.description.length > 0) {
+        descriptionController.text = value.description,
+      },
       print('AQUIII'),
       photoBase64 = value.profilePictureUrl,
       base64string = value.profilePictureUrl,
@@ -75,7 +85,7 @@ class _IdentityScreenState extends State<IdentityScreen> {
     });
   }
 
-  updateProfile(int profileId, String name, String gender, int dni, String birthdate) async {
+  updateProfile(int profileId, String name, String gender, int dni, String birthdate, String description) async {
     var jsonResponse = null;
     Uri myUri = Uri.parse("${globals.url}profiles/$profileId");
 
@@ -90,7 +100,9 @@ class _IdentityScreenState extends State<IdentityScreen> {
         'subscribersPrice': profile.subscribersPrice,
         'subsOn': profile.subsOn,
         'tipsOn': profile.tipsOn,
-        'dni': dni
+        'dni': dni,
+        'username': profile.username,
+        'description': description,
       }),
     );
 
@@ -104,7 +116,7 @@ class _IdentityScreenState extends State<IdentityScreen> {
           content: Text("Se actualizo correctamente"),
           backgroundColor: Color(0xFFC44C04),
         ));
-        //Navigator.push(context, MaterialPageRoute(builder: ((context) => const ProfileMenuScreen())));
+        //Navigator.push(context, MaterialPageRoute(builder: ((context) => const ProfileScreen())));
       }
     } else {
       print('Response status: ${response.statusCode}');
@@ -257,7 +269,7 @@ class _IdentityScreenState extends State<IdentityScreen> {
       ),
 
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.only(top: 5, left: 20, right: 20, bottom: 20),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -272,6 +284,7 @@ class _IdentityScreenState extends State<IdentityScreen> {
                         controlGender = 'Si';
                         controlDni = false;
                         controlDate = false; 
+                        controlDescription = false;
                         isEdit = true;
                         setState(() {
                           
@@ -313,7 +326,32 @@ class _IdentityScreenState extends State<IdentityScreen> {
                 readOnly: controlName,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'NOMBRES',
+                  labelText: 'Nombres',
+                  labelStyle: TextStyle(
+                  color: Colors.brown,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                  color: Colors.brown,
+                )),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                  color: Colors.brown,
+                ))),
+                style: const TextStyle(color: Colors.black),
+              ),
+         
+               const SizedBox(
+                height: 30,
+              ),
+        
+              TextFormField(
+                controller: descriptionController,
+                keyboardType: TextInputType.text,
+                readOnly: controlDescription,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Descripción',
                   labelStyle: TextStyle(
                   color: Colors.brown,
                 ),
@@ -471,7 +509,7 @@ class _IdentityScreenState extends State<IdentityScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {  
-                    updateProfile(globals.idProfileLogged, nameController.text, gender, int.parse(dniController.text), dateController.text + 'T00:00:00.000+00:00');      
+                    updateProfile(globals.idProfileLogged, nameController.text, gender, int.parse(dniController.text), dateController.text + 'T00:00:00.000+00:00', descriptionController.text);      
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(

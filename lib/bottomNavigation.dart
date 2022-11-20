@@ -26,11 +26,10 @@ class _bottomNavigationState extends State<bottomNavigation> {
 
   int _paginaActual=0;
   List<Widget> _paginas =[
-    //home(),
-    ProfileScreen(),
+    home(),
     SearchRecipe(chips: [],),
     CreateRecipeScreen(),
-    globals.isLoggedIn ? ProfileMenuScreen() : login(),
+    globals.isLoggedIn ? ProfileScreen() : login(),
   ];
 
   late List<ChipModel> ing;
@@ -47,12 +46,10 @@ class _bottomNavigationState extends State<bottomNavigation> {
     inspect(ing);
 
     _paginas =[
-      //home(),
-      ProfileScreen(),
+      home(),
       SearchRecipe(chips: ing),
-      //home(),
       CreateRecipeScreen(),
-      globals.isLoggedIn ? ProfileMenuScreen() : login(),
+      globals.isLoggedIn ? ProfileScreen() : login(),
     ];
 
   }

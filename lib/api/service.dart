@@ -20,7 +20,6 @@ import 'package:wecookmobile/globals.dart' as globals;
 
 class service{
 
-
   static Future<List<Ingredient>> getAllIngredients() async{
 
     final rspta = await http.get(Uri.parse('${globals.url}recipes/ingredients'));
@@ -344,5 +343,23 @@ class service{
       // then throw an exception.
       return 0;
     }
+  static Future<List<Recipe>> getAllRecipesByProfileId(int profileId) async{
+
+    final rspta = await http.get(Uri.parse('${globals.url}recipes/profiles/$profileId/recipes'));
+
+    if(rspta.statusCode == 200){
+      print('HOLAAAA' + rspta.body.toString());
+      if (rspta.body.isEmpty) {
+        List<Recipe> allRecipes = [];
+        return allRecipes;
+      } else {
+        final rsptaJson = json.decode(rspta.body);
+        //log('data: $rsptaJson');
+        final allRecipes = listRecipe.listaRecipe(rsptaJson);
+        // log('data222: $todosRecipe');
+        return allRecipes;
+      }
+    }
+    return <Recipe>[];
   }
 }

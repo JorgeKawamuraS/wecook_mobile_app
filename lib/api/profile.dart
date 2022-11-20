@@ -10,6 +10,8 @@ class Profile{
   final bool subsOn;
   final bool tipsOn;
   final int dni;
+  final String username;
+  final String description;
 
   Profile({
     required this.id,
@@ -21,6 +23,8 @@ class Profile{
     required this.subsOn,
     required this.tipsOn,
     required this.dni,
+    required this.username,
+    required this.description,
   });
 
   static Profile objJson(Map<String, dynamic> json){
@@ -34,6 +38,8 @@ class Profile{
       subsOn: json['subsOn'] as bool,
       tipsOn: json['tipsOn'] as bool,
       dni:json['dni'] as int,
+      username: json['username'] as String,
+      description: json['description'] as String
     );
   }
 
