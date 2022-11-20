@@ -73,11 +73,12 @@ class _ProfileScreenState extends State<ProfileScreen>
                       //     ),
                       //   ),
                       // ),
-                      SizedBox(
-                        width: 20,
-                      ),
+                      // SizedBox(
+                      //   width: 20,
+                      // ),
                       //Image.network('https://cdn2.psychologytoday.com/assets/styles/manual_crop_1_91_1_1528x800/public/field_blog_entry_images/2018-09/shutterstock_648907024.jpg?itok=7lrLYx-B',width: 150),
                       Column(
+                        //mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
                             profile.name,
@@ -86,13 +87,19 @@ class _ProfileScreenState extends State<ProfileScreen>
                           SizedBox(
                             height: 10,
                           ),
-                          Text('@${profile.username}'),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 6),
+                            child: Text('@${profile.username}'),
+                          ),
                           SizedBox(
                             height: 5,
                           ),
-                          FittedBox(
-                              fit: BoxFit.fill,
-                              child: Text( profile.description ))
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: FittedBox(
+                                fit: BoxFit.fill,
+                                child: Text( profile.description )),
+                          )
                         ],
                       )
                     ],
